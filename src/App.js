@@ -1,12 +1,29 @@
+import { useState } from 'react';
 import { initialFriends } from './data';
 
+function Button({ children, onClick }) {
+  return (
+    <button onClick={onClick} className='button'>
+      {children}
+    </button>
+  );
+}
+
 export default function App() {
+  const [showAddFriend, setShowAddFriend] = useState(false);
+
+  function handleShowAddFriend() {
+    setShowAddFriend((show) => !show);
+  }
+
   return (
     <div className='app'>
       <div className='sidebar'>
         <FriendsList />
-        <FormAddFriend />
-        <Button>Add friend</Button>
+        {showAddFriend && <FormAddFriend />}
+        <Button onClick={handleShowAddFriend}>
+          {showAddFriend ? 'Close' : 'Add friend'}
+        </Button>
       </div>
       <FormSplitBill />
     </div>
@@ -47,20 +64,25 @@ function Friend({ friend }) {
   );
 }
 
-function Button({ children }) {
-  return <button className='button'>{children}</button>;
-}
-
 function FormAddFriend() {
+  const [name, setName] = useState('');
+  const [img, setImg] = useState('');
+
+  function handleAddFriend() {}
+
   return (
     <form className='form-add-friend'>
       <label>👫 Friend name</label>
-      <input type='text' />
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        type='text'
+      />
 
       <label>🌠 Image URL</label>
-      <input type='text' />
+      <input value={img} onChange={(e) => setImg(e.target.value)} type='text' />
 
-      <Button>Add</Button>
+      <Button onClick={handleAddFriend}>Add</Button>
     </form>
   );
 }
